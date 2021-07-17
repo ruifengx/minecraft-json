@@ -16,11 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//! `minecraft-json` is for processing Minecraft JSON data.
+/// Assert that a JSON string and some data is equivalent, i.e. [`serde_json::from_str`] and
+/// [`serde_json::to_string`] converts them back and forth.
+#[macro_export]
+macro_rules! assert_equiv {
+    ($lhs: expr, $rhs: expr) => {
+        let __lhs = $lhs;
+        let __rhs = &$rhs;
+        assert_eq!(__lhs, serde_json::to_string(__rhs).unwrap());
+        assert_eq!(*__rhs, serde_json::from_str(__lhs).unwrap());
+    }
+}
 
-#![warn(missing_docs)]
-
-pub mod minecraft;
-
-#[doc(hidden)]
-pub mod test;
+/// Assert that a JSON string is NOT deserializable.
+#[macro_export]
+macro_rules! assert_cannot_deserialize {
+    ($lhs: expr => $t: ty) => {
+        assert!(serde_json::from_str::<$t>($lhs).is_err());
+    }
+}

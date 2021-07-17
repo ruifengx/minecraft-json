@@ -16,11 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//! `minecraft-json` is for processing Minecraft JSON data.
+//! All Minecraft related types and auxiliary functions.
 
-#![warn(missing_docs)]
-
-pub mod minecraft;
-
-#[doc(hidden)]
-pub mod test;
+pub mod text;
