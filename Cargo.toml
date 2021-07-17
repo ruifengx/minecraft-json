@@ -1,7 +1,12 @@
 [package]
 name = "minecraft-json"
 version = "0.1.0"
+authors = ["Ruifeng Xie <ruifengx@outlook.com>"]
 edition = "2018"
+repository = "https://github.com/ruifengx/minecraft-json.git"
+homepage = "https://github.com/ruifengx/minecraft-json.git"
+license = "AGPL-3.0-or-later"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
