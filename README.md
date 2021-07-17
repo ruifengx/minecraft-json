@@ -10,4 +10,4 @@ Reading Minecraft JSON data into strongly typed Rust data structures.
 
 This project is licensed under the _GNU Affero General Public License_ as published by the _Free Software Foundation_, either version 3 of the License, or (at your option) any later version.
 
-Part of the documentation comments are collected from [Minecraft Wiki](https://minecraft.fandom.com), and those contents are licensed under [![](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-sa.svg) CC-BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
+Part of the documentation comments are collected from [Minecraft Wiki](https://minecraft.fandom.com), and those contents are licensed under [![](https://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg) CC-BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
