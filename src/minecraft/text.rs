@@ -263,7 +263,7 @@ pub enum ClickEventAction {
     CopyToClipboard,
 }
 
-/// Part of [`HoverEventStructure`].
+/// Part of [`HoverEvent`].
 #[derive(Eq, PartialEq, Debug)]
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
