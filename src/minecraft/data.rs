@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//! All Minecraft related types and auxiliary functions.
+//! [Minecraft data packs](https://minecraft.fandom.com/wiki/Data_Pack).
 
-pub mod text;
-pub mod data;
+pub mod meta;

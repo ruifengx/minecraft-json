@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//! [Raw JSON text format](https://minecraft.fandom.com/wiki/Raw_JSON_text_format)
+//! [Raw JSON text format](https://minecraft.fandom.com/wiki/Raw_JSON_text_format).
 
 use serde::{Serialize, Deserialize, Serializer, Deserializer};
 use serde_json::Number;
