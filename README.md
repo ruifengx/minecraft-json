@@ -1,7 +1,9 @@
 # Minecraft JSON
 
 [![language](https://img.shields.io/badge/Language-Rust-red)](https://www.rust-lang.org/)
+[![Build](https://github.com/ruifengx/minecraft-json/actions/workflows/build.yaml/badge.svg)](https://github.com/ruifengx/minecraft-json/actions/workflows/build.yaml)
 [![license](https://img.shields.io/badge/License-AGPL--v3.0-blueviolet)](https://www.gnu.org/licenses/agpl-3.0.html)
+[![docs](https://img.shields.io/badge/Doc-GitHub%20Pages-brightgreen)](https://ruifengx.github.io/minecraft-json/)
 ![version](https://img.shields.io/badge/WIP-0.1.0-yellow)
 
 Reading Minecraft JSON data into strongly typed Rust data structures.
