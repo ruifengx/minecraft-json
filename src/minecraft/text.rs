@@ -378,8 +378,7 @@ pub struct Score {
 /// # use minecraft_json::{assert_equiv, minecraft::text::StringLike};
 /// assert_equiv!(r#""some text""#, StringLike::String("some text".to_string()));
 /// assert_equiv!(r#"42"#, StringLike::Number(serde_json::Number::from(42)));
-/// // waiting for [serde-json#785](https://github.com/serde-rs/json/issues/785)
-/// assert_equiv!(r#"1.9e10"#, StringLike::Number(serde_json::Number::from_str("1.9e10").unwrap()));
+/// assert_equiv!(r#"1.9E10"#, StringLike::Number(serde_json::Number::from_str("1.9E10").unwrap()));
 /// assert_equiv!("true", StringLike::Boolean(true));
 /// ```
 #[derive(Eq, PartialEq, Debug)]
