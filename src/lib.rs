@@ -22,5 +22,4 @@
 
 pub mod minecraft;
 
-#[doc(hidden)]
-pub mod test;
+mod test;
