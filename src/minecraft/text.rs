@@ -21,26 +21,7 @@
 use serde::{Serialize, Deserialize, Serializer, Deserializer};
 use serde_json::Number;
 use std::fmt::{Display, Formatter};
-
-mod defaults {
-    use crate::minecraft::text::{TextComponent, TextComponentTags, StringLike, Formatting, Colour, ColourName};
-
-    #[inline(always)]
-    pub fn is_false(&x: &bool) -> bool { !x }
-
-    pub fn entity_names_separator() -> Box<TextComponent> {
-        Box::new(TextComponent::Text {
-            text: StringLike::String(", ".into()),
-            properties: TextComponentTags {
-                formatting: Formatting {
-                    color: Some(Colour::Named(ColourName::Gray)),
-                    ..Formatting::default()
-                },
-                ..TextComponentTags::default()
-            },
-        })
-    }
-}
+use crate::defaults;
 
 /// Text colours, either pre-defined or custom hexadecimal colours.
 ///

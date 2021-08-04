@@ -17,6 +17,22 @@
  */
 
 //! `pack.mcmeta` files.
+//!
+//! ```
+//! # use minecraft_json::assert_equiv_pretty;
+//! # use minecraft_json::minecraft::data::meta::{McMeta, pack_format};
+//! # use minecraft_json::minecraft::text::{TextComponent, StringLike};
+//! assert_equiv_pretty!(r#"{
+//!   "pack": {
+//!     "description": "Some example description.",
+//!     "pack_format": 6
+//!   }
+//! }"#, McMeta::Pack {
+//!     description: TextComponent::RawTextLike(StringLike::String(
+//!         "Some example description.".to_string())),
+//!     pack_format: pack_format::VER_6,
+//! });
+//! ```
 
 use serde::{Serialize, Deserialize};
 

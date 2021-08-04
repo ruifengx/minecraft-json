@@ -19,3 +19,5 @@
 //! [Minecraft data packs](https://minecraft.fandom.com/wiki/Data_Pack).
 
 pub mod meta;
+pub mod advancement;
+pub mod conditions;

@@ -28,6 +28,18 @@ macro_rules! assert_equiv {
     }
 }
 
+/// Assert that a JSON string and some data is equivalent, i.e. [`serde_json::from_str`] and
+/// [`serde_json::to_string_pretty`] converts them back and forth.
+#[macro_export]
+macro_rules! assert_equiv_pretty {
+    ($lhs: expr, $rhs: expr) => {
+        let __lhs = $lhs;
+        let __rhs = &$rhs;
+        assert_eq!(__lhs, serde_json::to_string_pretty(__rhs).unwrap());
+        assert_eq!(*__rhs, serde_json::from_str(__lhs).unwrap());
+    }
+}
+
 /// Assert that a JSON string is NOT deserializable.
 #[macro_export]
 macro_rules! assert_cannot_deserialize {

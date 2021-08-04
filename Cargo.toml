@@ -14,3 +14,6 @@ readme = "README.md"
 derivative = "2.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0.66", features = ["arbitrary_precision", "raw_value"] }
+
+[dev-dependencies]
+maplit = "1.0"

@@ -18,5 +18,6 @@
 
 //! All Minecraft related types and auxiliary functions.
 
+pub mod common;
 pub mod text;
 pub mod data;

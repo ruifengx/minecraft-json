@@ -23,3 +23,32 @@
 pub mod minecraft;
 
 mod test;
+
+mod defaults {
+    use crate::minecraft::text::{TextComponent, TextComponentTags, StringLike, Formatting, Colour, ColourName};
+
+    #[inline(always)]
+    pub fn is_default<T: Default + Eq>(x: &T) -> bool { *x == Default::default() }
+
+    #[inline(always)]
+    pub fn is_false(&x: &bool) -> bool { !x }
+
+    #[inline(always)]
+    pub fn is_true(&x: &bool) -> bool { x }
+
+    #[inline(always)]
+    pub fn r#true() -> bool { true }
+
+    pub fn entity_names_separator() -> Box<TextComponent> {
+        Box::new(TextComponent::Text {
+            text: StringLike::String(", ".into()),
+            properties: TextComponentTags {
+                formatting: Formatting {
+                    color: Some(Colour::Named(ColourName::Gray)),
+                    ..Formatting::default()
+                },
+                ..TextComponentTags::default()
+            },
+        })
+    }
+}
