@@ -21,3 +21,4 @@
 pub mod meta;
 pub mod advancement;
 pub mod conditions;
+pub mod predicate;

@@ -20,6 +20,20 @@
 
 use derivative::Derivative;
 use serde::{Serialize, Deserialize};
+use serde_json::Number;
+
+/// Union of two JSON deserializable objects.
+#[derive(Eq, PartialEq, Debug)]
+#[derive(Derivative, Serialize, Deserialize)]
+#[derivative(Default(bound = "L: Default"))]
+#[serde(untagged)]
+pub enum Either<L, R> {
+    /// Left branch. Defaulted.
+    #[derivative(Default)]
+    Left(L),
+    /// Right branch.
+    Right(R),
+}
 
 /// A 3D vector, for positions, velocities, etc.
 #[derive(Eq, PartialEq, Debug)]
@@ -36,19 +50,22 @@ pub struct Vector3d<I> {
 }
 
 /// Ranged values for use in conditions.
+pub type Ranged<I> = Ranged2<I, I>;
+
+/// Ranged values for use in conditions, with possibly different types for exact and ranged values.
 #[derive(Eq, PartialEq, Debug)]
 #[derive(Derivative, Serialize, Deserialize)]
 #[derivative(Default)]
 #[serde(untagged)]
 #[allow(missing_docs)]
-pub enum Ranged<I> {
+pub enum Ranged2<I, N> {
     #[derivative(Default)]
     Exact(I),
     Range {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        min: Option<I>,
+        min: Option<N>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        max: Option<I>,
+        max: Option<N>,
     },
 }
 
@@ -61,4 +78,75 @@ pub enum PlainValue {
     Boolean(bool),
     Integer(Ranged<isize>),
     String(String),
+}
+
+/// Constant number provider as raw number or JSON object.
+pub type NumberProviderValue<I> = Either<I, Box<NumberProvider<I>>>;
+
+/// Loot tables use number providers in some places that accept an int or float. They can either
+/// be defined as a constant value or as an object.
+#[derive(Eq, PartialEq, Debug)]
+#[derive(Serialize, Deserialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum NumberProvider<I> {
+    /// A constant value.
+    Constant {
+        /// The exact value.
+        value: I,
+    },
+    /// A random number following a uniform distribution between two values (inclusive).
+    Uniform {
+        /// Number provider. The minimum value.
+        min: Box<NumberProviderValue<I>>,
+        /// Number provider. The maximum value.
+        max: Box<NumberProviderValue<I>>,
+    },
+    /// A random number following a binomial distribution.
+    Binomial {
+        /// Number provider. The amount of trials.
+        min: Box<NumberProviderValue<isize>>,
+        /// Number provider. The probability of success on an individual trial.
+        max: Box<NumberProviderValue<Number>>,
+    },
+    /// A scoreboard value.
+    Score {
+        /// Scoreboard name provider.
+        target: ScoreboardNameProvider,
+        /// The scoreboard objective.
+        score: String,
+        /// Optional. Scale to multiply the score before returning it.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        scale: Option<Number>,
+    },
+}
+
+/// Scoreboard name provider.
+pub type ScoreboardNameProvider = Either<ScoreboardName, ScoreboardSelector>;
+
+/// Scoreboard name provider.
+#[derive(Eq, PartialEq, Debug)]
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+#[allow(missing_docs)]
+pub enum ScoreboardName {
+    This,
+    Killer,
+    DirectKiller,
+    PlayerKiller,
+}
+
+/// Scoreboard name provider.
+#[derive(Eq, PartialEq, Debug)]
+#[derive(Serialize, Deserialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+#[allow(missing_docs)]
+pub enum ScoreboardSelector {
+    Fixed {
+        /// A UUID or playername.
+        name: String,
+    },
+    Context {
+        /// Scoreboard name provider.
+        target: ScoreboardName,
+    },
 }

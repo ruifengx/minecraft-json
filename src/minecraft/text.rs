@@ -196,10 +196,10 @@ pub struct Interactivity {
     /// Allows for events to occur when the player clicks on text. Only work in chat messages
     /// and written books, unless specified otherwise.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub click_event: Option<ClickEvent>,
+    pub click_event: Option<Box<ClickEvent>>,
     /// Allows for a tooltip to be displayed when the player hovers their mouse over text.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub hover_event: Option<HoverEvent>,
+    pub hover_event: Option<Box<HoverEvent>>,
 }
 
 /// Event upon mouse click on this text component.

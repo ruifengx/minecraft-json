@@ -31,7 +31,7 @@ pub struct Location {
     pub biome: Option<String>,
     /// The block at the location.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub block: Option<Block>,
+    pub block: Option<Box<Block>>,
     /// The dimension the entity is currently in.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dimension: Option<String>,
@@ -40,13 +40,13 @@ pub struct Location {
     pub feature: Option<String>,
     /// The fluid at the location.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fluid: Option<Fluid>,
+    pub fluid: Option<Box<Fluid>>,
     /// The light Level of visible light. Calculated using: `max(sky - darkening, block)`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub light: Option<Ranged<isize>>,
     /// Block coordinate of this location.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub position: Option<Vector3d<Ranged<isize>>>,
+    pub position: Option<Box<Vector3d<Ranged<isize>>>>,
     /// True if the block is closely above a campfire or soul campfire.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub smokey: Option<bool>,
@@ -92,7 +92,7 @@ pub struct Entity {
     /// The player that would get the advancement. May also be a list of predicates that must
     /// pass in order for the trigger to activate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub distance: Option<Distance>,
+    pub distance: Option<Box<Distance>>,
     /// A list of status effects.
     ///
     /// Item: A status effect with the key name being the status effect name.
@@ -109,7 +109,7 @@ pub struct Entity {
     pub lightning_bolt: Option<Box<LightningBolt>>,
     /// Location of this entity.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub location: Option<Location>,
+    pub location: Option<Box<Location>>,
     /// An NBT string.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub nbt: Option<String>,
@@ -118,10 +118,10 @@ pub struct Entity {
     pub passenger: Option<Box<Entity>>,
     /// Player properties to be checked. Fails when entity is not a player.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub player: Option<Player>,
+    pub player: Option<Box<Player>>,
     /// Location predicate for the block the entity is standing on.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub stepping_on: Option<Location>,
+    pub stepping_on: Option<Box<Location>>,
     /// The team the entity belongs to.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub team: Option<String>,
@@ -173,17 +173,17 @@ pub struct Effect {
 #[allow(missing_docs)]
 pub struct Equipment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mainhand: Option<Item>,
+    pub mainhand: Option<Box<Item>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub offhand: Option<Item>,
+    pub offhand: Option<Box<Item>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub head: Option<Item>,
+    pub head: Option<Box<Item>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub chest: Option<Item>,
+    pub chest: Option<Box<Item>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub legs: Option<Item>,
+    pub legs: Option<Box<Item>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub feet: Option<Item>,
+    pub feet: Option<Box<Item>>,
 }
 
 /// Tags common to all items.
@@ -259,7 +259,7 @@ pub struct LightningBolt {
     /// Entity properties of entities struck by this lightning bolt. If present, this tag must
     /// match one or more entities.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub entity_struck: Option<Entity>,
+    pub entity_struck: Option<Box<Entity>>,
     /// Properties of this lightning bolt as an entity.
     #[serde(flatten)]
     pub lightning_entity: Entity,
@@ -331,4 +331,40 @@ pub struct Statistic {
     pub stat: String,
     /// The value of the statistic.
     pub value: Ranged<isize>,
+}
+
+/// Properties of damage source.
+#[derive(Eq, PartialEq, Debug, Default)]
+#[derive(Serialize, Deserialize)]
+pub struct DamageSource {
+    /// Checks if the damage bypassed the armor of the player (suffocation damage predominantly).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bypasses_armor: Option<bool>,
+    /// Checks if the damage bypassed the invulnerability status of the player (void or /kill damage).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bypasses_invulnerability: Option<bool>,
+    /// Checks if the damage was caused by starvation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bypasses_magic: Option<bool>,
+    /// The entity that was the direct cause of the damage.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub direct_entity: Option<Box<Entity>>,
+    /// Checks if the damage originated from an explosion.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_explosion: Option<bool>,
+    /// Checks if the damage originated from fire.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_fire: Option<bool>,
+    /// Checks if the damage originated from magic.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_magic: Option<bool>,
+    /// Checks if the damage originated from a projectile.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_projectile: Option<bool>,
+    /// Checks if the damage originated from lightning.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_lightning: Option<bool>,
+    /// Checks the entity that was the source of the damage (for example: The skeleton that shot the arrow).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_entity: Option<Box<Entity>>,
 }

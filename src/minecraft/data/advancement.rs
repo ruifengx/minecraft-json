@@ -50,7 +50,7 @@
 //!   ]
 //! }"#, Advancement {
 //!     parent: Some("minecraft:adventure/root".to_string()),
-//!     display: Some(Display {
+//!     display: Some(Box::new(Display {
 //!         icon: Some(Icon {
 //!             item: "minecraft:red_bed".to_string(),
 //!             nbt: None,
@@ -70,7 +70,7 @@
 //!         show_toast: true,
 //!         announce_to_chat: true,
 //!         hidden: false,
-//!     }),
+//!     })),
 //!     criteria: btreemap!{
 //!         "slept_in_bed".to_string() => Criterion::SleptInBed {
 //!             location: None,
@@ -87,7 +87,8 @@ use derivative::Derivative;
 use serde::{Serialize, Deserialize};
 use crate::defaults;
 use crate::minecraft::text::TextComponent;
-use crate::minecraft::data::conditions::{Location, Entity};
+use crate::minecraft::data::conditions::{Location, Entity, Item};
+use crate::minecraft::common::Either;
 
 /// An advancement JSON file.
 #[derive(Eq, PartialEq, Debug)]
@@ -95,7 +96,7 @@ use crate::minecraft::data::conditions::{Location, Entity};
 pub struct Advancement {
     /// The optional display data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub display: Option<Display>,
+    pub display: Option<Box<Display>>,
     /// The optional parent advancement directory of this advancement. If this field is absent,
     /// this advancement is a root advancement. Circular references cause a loading failure.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -186,16 +187,33 @@ pub enum Frame {
 #[serde(tag = "trigger", content = "conditions")]
 #[non_exhaustive]
 pub enum Criterion {
+    /// Triggers when the player breaks a bee nest or beehive.
+    #[serde(rename = "minecraft:bee_nest_destroyed")]
+    BeeNestDestroyed {
+        /// The block that was destroyed. Accepts block IDs.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        block: Option<String>,
+        /// The item used to break the block. See also [`Item`].
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        item: Option<Box<Item>>,
+        /// The number of bees that were inside the bee nest/beehive before it was broken.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        num_bees_inside: Option<isize>,
+        /// The player that would get the advancement. May also be a list of predicates that must
+        /// pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        player: Option<Either<Vec<String>, Box<Entity>>>,
+    },
     /// Triggers when the player enters a bed.
     #[serde(rename = "minecraft:slept_in_bed")]
     SleptInBed {
         /// The location of the player.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        location: Option<Location>,
+        location: Option<Box<Location>>,
         /// The player that would get the advancement. May also be a list of predicates that
         /// must pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        player: Option<Entity>,
+        player: Option<Either<Vec<String>, Box<Entity>>>,
     },
 }
 
