@@ -311,7 +311,7 @@ pub enum Criterion {
     /// # use minecraft_json::assert_equiv_pretty_protected;
     /// # use minecraft_json::minecraft::data::conditions::{Item, Location};
     /// # use minecraft_json::minecraft::data::advancement::Criterion;
-    /// use minecraft_json::minecraft::common::{Vector3d, Ranged};
+    /// # use minecraft_json::minecraft::common::{Vector3d, Ranged};
     /// assert_equiv_pretty_protected!(r#"{
     ///   "trigger": "minecraft:slept_in_bed",
     ///   "conditions": {
