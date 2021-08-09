@@ -87,8 +87,7 @@ use derivative::Derivative;
 use serde::{Serialize, Deserialize};
 use crate::defaults;
 use crate::minecraft::text::TextComponent;
-use crate::minecraft::data::conditions::{Location, Entity, Item};
-use crate::minecraft::common::Either;
+use crate::minecraft::data::conditions::{Location, Item, PredicatesOrEntity};
 
 /// An advancement JSON file.
 #[derive(Eq, PartialEq, Debug)]
@@ -228,7 +227,7 @@ pub enum Criterion {
         /// The player that would get the advancement. May also be a list of predicates that must
         /// pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        player: Option<Either<Vec<String>, Box<Entity>>>,
+        player: Option<PredicatesOrEntity>,
     },
     /// Triggers after the player breeds 2 animals.
     ///
@@ -291,19 +290,19 @@ pub enum Criterion {
         /// The child that results from the breeding. May also be a list of predicates that must
         /// pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        child: Option<Either<Vec<String>, Box<Entity>>>,
+        child: Option<PredicatesOrEntity>,
         /// The parent. May also be a list of predicates that must pass in order for the trigger
         /// to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        parent: Option<Either<Vec<String>, Box<Entity>>>,
+        parent: Option<PredicatesOrEntity>,
         /// The partner. (The entity the parent was bred with) May also be a list of predicates
         /// that must pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        partner: Option<Either<Vec<String>, Box<Entity>>>,
+        partner: Option<PredicatesOrEntity>,
         /// The player that would get the advancement. May also be a list of predicates that must
         /// pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        player: Option<Either<Vec<String>, Box<Entity>>>,
+        player: Option<PredicatesOrEntity>,
     },
     /// Triggers when the player enters a bed.
     ///
@@ -350,7 +349,7 @@ pub enum Criterion {
         /// The player that would get the advancement. May also be a list of predicates that
         /// must pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        player: Option<Either<Vec<String>, Box<Entity>>>,
+        player: Option<PredicatesOrEntity>,
     },
 }
 

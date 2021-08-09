@@ -20,7 +20,7 @@
 
 use std::collections::BTreeMap;
 use serde::{Serialize, Deserialize};
-use crate::minecraft::common::{Ranged, Vector3d, PlainValue};
+use crate::minecraft::common::{Ranged, Vector3d, PlainValue, Either};
 
 /// Tags common to all locations.
 #[derive(Eq, PartialEq, Debug, Default)]
@@ -135,6 +135,9 @@ pub struct Entity {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub vehicle: Option<Box<Entity>>,
 }
+
+/// Either a list of predicates, or an entity.
+pub type PredicatesOrEntity = Either<Vec<String>, Box<Entity>>;
 
 /// World distance.
 #[derive(Eq, PartialEq, Debug, Default)]
