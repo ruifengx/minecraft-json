@@ -188,6 +188,32 @@ pub enum Frame {
 #[non_exhaustive]
 pub enum Criterion {
     /// Triggers when the player breaks a bee nest or beehive.
+    ///
+    /// ```
+    /// # use minecraft_json::assert_equiv_pretty;
+    /// # use minecraft_json::minecraft::data::conditions::Item;
+    /// # use minecraft_json::minecraft::data::advancement::Criterion;
+    /// assert_equiv_pretty!(r#"{
+    ///   "trigger": "minecraft:bee_nest_destroyed",
+    ///   "conditions": {
+    ///     "block": "minecraft:beehive",
+    ///     "item": {
+    ///       "items": [
+    ///         "minecraft:wooden_axe"
+    ///       ]
+    ///     },
+    ///     "num_bees_inside": 3
+    ///   }
+    /// }"#, Criterion::BeeNestDestroyed {
+    ///     block: Some("minecraft:beehive".to_string()),
+    ///     item: Some(Box::new(Item {
+    ///         items: vec!["minecraft:wooden_axe".to_string()],
+    ///         ..Item::default()
+    ///     })),
+    ///     num_bees_inside: Some(3),
+    ///     player: None,
+    /// });
+    /// ```
     #[serde(rename = "minecraft:bee_nest_destroyed")]
     BeeNestDestroyed {
         /// The block that was destroyed. Accepts block IDs.
@@ -204,7 +230,118 @@ pub enum Criterion {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         player: Option<Either<Vec<String>, Box<Entity>>>,
     },
+    /// Triggers after the player breeds 2 animals.
+    ///
+    /// ```
+    /// # use maplit::btreemap;
+    /// # use minecraft_json::assert_equiv_pretty_protected;
+    /// # use minecraft_json::minecraft::data::conditions::{Item, Entity, Location, Effect};
+    /// # use minecraft_json::minecraft::data::advancement::Criterion;
+    /// # use minecraft_json::minecraft::common::{Ranged, Either};
+    /// assert_equiv_pretty_protected!(r#"{
+    ///   "trigger": "minecraft:bred_animals",
+    ///   "conditions": {
+    ///     "child": {
+    ///       "type": "minecraft:mule"
+    ///     },
+    ///     "parent": {
+    ///       "location": {
+    ///         "biome": "minecraft:beach"
+    ///       }
+    ///     },
+    ///     "partner": {
+    ///       "effects": {
+    ///         "minecraft:speed": {
+    ///           "amplifier": {
+    ///             "min": 2
+    ///           }
+    ///         }
+    ///       }
+    ///     }
+    ///   }
+    /// }"#, Criterion::BredAnimals {
+    ///     child: Some(Either::Right(Box::new(Entity {
+    ///         r#type: Some("minecraft:mule".to_string()),
+    ///         ..Entity::default()
+    ///     }))),
+    ///     parent: Some(Either::Right(Box::new(Entity {
+    ///         location: Some(Box::new(Location {
+    ///             biome: Some("minecraft:beach".to_string()),
+    ///             ..Location::default()
+    ///         })),
+    ///         ..Entity::default()
+    ///     }))),
+    ///     partner: Some(Either::Right(Box::new(Entity {
+    ///         effects: btreemap! {
+    ///             "minecraft:speed".to_string() => Effect {
+    ///                 amplifier: Some(Ranged::Range {
+    ///                     min: Some(2),
+    ///                     max: None,
+    ///                 }),
+    ///                 ..Effect::default()
+    ///             },
+    ///         },
+    ///         ..Entity::default()
+    ///     }))),
+    ///     player: None,
+    /// });
+    /// ```
+    #[serde(rename = "minecraft:bred_animals")]
+    BredAnimals {
+        /// The child that results from the breeding. May also be a list of predicates that must
+        /// pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        child: Option<Either<Vec<String>, Box<Entity>>>,
+        /// The parent. May also be a list of predicates that must pass in order for the trigger
+        /// to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        parent: Option<Either<Vec<String>, Box<Entity>>>,
+        /// The partner. (The entity the parent was bred with) May also be a list of predicates
+        /// that must pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        partner: Option<Either<Vec<String>, Box<Entity>>>,
+        /// The player that would get the advancement. May also be a list of predicates that must
+        /// pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        player: Option<Either<Vec<String>, Box<Entity>>>,
+    },
     /// Triggers when the player enters a bed.
+    ///
+    /// ```
+    /// # use minecraft_json::assert_equiv_pretty_protected;
+    /// # use minecraft_json::minecraft::data::conditions::{Item, Location};
+    /// # use minecraft_json::minecraft::data::advancement::Criterion;
+    /// use minecraft_json::minecraft::common::{Vector3d, Ranged};
+    /// assert_equiv_pretty_protected!(r#"{
+    ///   "trigger": "minecraft:slept_in_bed",
+    ///   "conditions": {
+    ///     "location": {
+    ///       "biome": "minecraft:desert",
+    ///       "feature": "village",
+    ///       "position": {
+    ///         "y": {
+    ///           "min": 50,
+    ///           "max": 100
+    ///         }
+    ///       }
+    ///     }
+    ///   }
+    /// }"#, Criterion::SleptInBed {
+    ///     location: Some(Box::new(Location {
+    ///         biome: Some("minecraft:desert".to_string()),
+    ///         feature: Some("village".to_string()),
+    ///         position: Some(Box::new(Vector3d {
+    ///             y: Some(Ranged::Range {
+    ///                 min: Some(50),
+    ///                 max: Some(100),
+    ///             }),
+    ///             ..Vector3d::default()
+    ///         })),
+    ///         ..Location::default()
+    ///     })),
+    ///     player: None,
+    /// });
+    /// ```
     #[serde(rename = "minecraft:slept_in_bed")]
     SleptInBed {
         /// The location of the player.

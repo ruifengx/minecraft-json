@@ -155,16 +155,16 @@ pub struct Distance {
 pub struct Effect {
     /// Whether the effect is from a beacon.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    ambient: Option<bool>,
+    pub ambient: Option<bool>,
     /// The effect amplifier.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    amplifier: Option<Ranged<isize>>,
+    pub amplifier: Option<Ranged<isize>>,
     /// The effect duration in ticks.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    duration: Option<Ranged<isize>>,
+    pub duration: Option<Ranged<isize>>,
     /// Whether the effect has visible particles.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    visible: Option<bool>,
+    pub visible: Option<bool>,
 }
 
 /// Entity equipments.
@@ -234,19 +234,19 @@ pub struct Enchantment {
 pub struct EntityFlags {
     /// Test whether the entity is or is not on fire.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    is_on_fire: Option<bool>,
+    pub is_on_fire: Option<bool>,
     /// Test whether the entity is or is not sneaking.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    is_sneaking: Option<bool>,
+    pub is_sneaking: Option<bool>,
     /// Test whether the entity is or is not sprinting.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    is_sprinting: Option<bool>,
+    pub is_sprinting: Option<bool>,
     /// Test whether the entity is or is not swimming.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    is_swimming: Option<bool>,
+    pub is_swimming: Option<bool>,
     /// Test whether the entity is or is not a baby variant.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    is_baby: Option<bool>,
+    pub is_baby: Option<bool>,
 }
 
 /// Lightning bolt properties.
