@@ -87,7 +87,7 @@ use derivative::Derivative;
 use serde::{Serialize, Deserialize};
 use crate::defaults;
 use crate::minecraft::text::TextComponent;
-use crate::minecraft::data::conditions::{Location, Item, PredicatesOrEntity};
+use crate::minecraft::data::conditions::{Location, Item, PredicatesOrEntity, Entity};
 
 /// An advancement JSON file.
 #[derive(Eq, PartialEq, Debug)]
@@ -299,6 +299,99 @@ pub enum Criterion {
         /// that must pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         partner: Option<PredicatesOrEntity>,
+        /// The player that would get the advancement. May also be a list of predicates that must
+        /// pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        player: Option<PredicatesOrEntity>,
+    },
+    /// Triggers after the player takes any item out of a brewing stand.
+    ///
+    /// ```
+    /// # use minecraft_json::assert_equiv_pretty;
+    /// # use minecraft_json::minecraft::data::advancement::Criterion;
+    /// assert_equiv_pretty!(r#"{
+    ///   "trigger": "minecraft:brewed_potion",
+    ///   "conditions": {
+    ///     "potion": "minecraft:strong_swiftness"
+    ///   }
+    /// }"#, Criterion::BrewedPotion {
+    ///     potion: Some("minecraft:strong_swiftness".to_string()),
+    ///     player: None,
+    /// });
+    /// ```
+    #[serde(rename = "minecraft:brewed_potion")]
+    BrewedPotion {
+        /// A brewed potion ID.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        potion: Option<String>,
+        /// The player that would get the advancement. May also be a list of predicates that must
+        /// pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        player: Option<PredicatesOrEntity>,
+    },
+    /// Triggers after the player travels between two dimensions.
+    ///
+    /// ```
+    /// # use minecraft_json::assert_equiv_pretty;
+    /// # use minecraft_json::minecraft::data::advancement::Criterion;
+    /// assert_equiv_pretty!(r#"{
+    ///   "trigger": "minecraft:changed_dimension",
+    ///   "conditions": {
+    ///     "from": "minecraft:the_end",
+    ///     "to": "minecraft:overworld"
+    ///   }
+    /// }"#, Criterion::ChangedDimension {
+    ///     from: Some("minecraft:the_end".to_string()),
+    ///     to: Some("minecraft:overworld".to_string()),
+    ///     player: None,
+    /// });
+    /// ```
+    #[serde(rename = "minecraft:changed_dimension")]
+    ChangedDimension {
+        /// The dimension the entity traveled from. Accepts these 3 values.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        from: Option<String>,
+        /// The dimension the entity traveled to. Same accepted values as above.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        to: Option<String>,
+        /// The player that would get the advancement. May also be a list of predicates that must
+        /// pass in order for the trigger to activate.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        player: Option<PredicatesOrEntity>,
+    },
+    /// Triggers after the player successfully uses the Channeling enchantment on an entity.
+    ///
+    /// ```
+    /// # use minecraft_json::assert_equiv_pretty;
+    /// # use minecraft_json::minecraft::data::advancement::Criterion;
+    /// use minecraft_json::minecraft::data::conditions::Entity;
+    /// assert_equiv_pretty!(r#"{
+    ///   "trigger": "minecraft:channeled_lightning",
+    ///   "conditions": {
+    ///     "victims": [
+    ///       {
+    ///         "nbt": "{SkeletonTrap: true}",
+    ///         "type": "minecraft:skeleton_horse"
+    ///       }
+    ///     ]
+    ///   }
+    /// }"#, Criterion::ChanneledLightning {
+    ///     victims: vec![Entity {
+    ///         r#type: Some("minecraft:skeleton_horse".to_string()),
+    ///         nbt: Some("{SkeletonTrap: true}".to_string()),
+    ///         ..Entity::default()
+    ///     }],
+    ///     player: None,
+    /// });
+    /// ```
+    #[serde(rename = "minecraft:channeled_lightning")]
+    ChanneledLightning {
+        /// The victims hit by the lightning summoned by the Channeling enchantment. All entities
+        /// in this list must be hit. Each entry may also be a list of predicates that must pass
+        /// in order for the trigger to activate. The checks are applied to the victim hit by the
+        /// enchanted trident.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        victims: Vec<Entity>,
         /// The player that would get the advancement. May also be a list of predicates that must
         /// pass in order for the trigger to activate.
         #[serde(default, skip_serializing_if = "Option::is_none")]
