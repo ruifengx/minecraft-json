@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["VER_4","Minecraft 1.13–1.14.4."],["VER_5","Minecraft 1.15–1.16.1."],["VER_6","Minecraft 1.16.2–1.16.5."],["VER_7","Minecraft 1.17."]]});

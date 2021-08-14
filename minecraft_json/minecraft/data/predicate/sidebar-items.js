@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Predicate","Predicate."],["WhichEntity","Specifies the entity to check for the condition."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["common","Common data types for use in Minecraft JSON."],["data","Minecraft data packs."],["text","Raw JSON text format."]]});

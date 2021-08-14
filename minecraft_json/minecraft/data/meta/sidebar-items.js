@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["McMeta","A data pack is identified by Minecraft based on the presence of the `pack.mcmeta` file in the root directory of the data pack, which contains data in JSON format."]],"mod":[["pack_format","Known `pack_format` field for [`McMeta`]."]]});
